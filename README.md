@@ -4,7 +4,7 @@ An end-to-end Big Data pipeline for forecasting household electricity consumptio
 
 ## Overview
 
-This final-year project demonstrates a scalable Big Data architecture for energy consumption forecasting. The pipeline ingests the UCI Individual Household Electric Power Consumption dataset (~2 million minute-level records), processes it with PySpark, trains multiple regression models, and generates 24-hour ahead forecasts.
+This project demonstrates a scalable Big Data architecture for energy consumption forecasting. The pipeline ingests the UCI Individual Household Electric Power Consumption dataset (~2 million minute-level records), processes it with PySpark, trains multiple regression models, and generates 24-hour ahead forecasts.
 
 > **Scalability Note:** The prototype uses a publicly available dataset of manageable size. The HDFS + Spark architecture can be extended to much larger smart-meter datasets in production deployments.
 
