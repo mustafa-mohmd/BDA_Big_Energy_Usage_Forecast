@@ -1,0 +1,48 @@
+# HDFS Commands - Linux / WSL2
+# ==============================
+# Prerequisites: Hadoop installed, JAVA_HOME set, SSH configured
+
+# --- START HADOOP ---
+# start-dfs.sh
+# start-yarn.sh
+
+# --- STOP HADOOP ---
+# stop-dfs.sh
+# stop-yarn.sh
+
+# --- CREATE HDFS DIRECTORIES ---
+hdfs dfs -mkdir -p /energy_forecasting/raw
+hdfs dfs -mkdir -p /energy_forecasting/processed
+hdfs dfs -mkdir -p /energy_forecasting/features
+hdfs dfs -mkdir -p /energy_forecasting/results
+
+# --- SET PERMISSIONS ---
+hdfs dfs -chmod -R 755 /energy_forecasting
+
+# --- UPLOAD RAW DATASET ---
+hdfs dfs -put data/raw/household_power_consumption.txt /energy_forecasting/raw/
+
+# --- VERIFY ---
+hdfs dfs -ls -h /energy_forecasting/raw/
+hdfs dfs -du -s -h /energy_forecasting/raw/household_power_consumption.txt
+
+# --- LIST PROCESSED OUTPUT ---
+hdfs dfs -ls /energy_forecasting/processed/hourly/
+hdfs dfs -ls /energy_forecasting/features/features/
+
+# --- READ PARQUET METADATA ---
+hdfs dfs -ls /energy_forecasting/processed/hourly/_SUCCESS
+
+# --- COPY TO LOCAL ---
+hdfs dfs -get /energy_forecasting/processed/hourly ./data/processed/hourly_from_hdfs
+
+# --- HDFS WEB UI ---
+# NameNode: http://localhost:9870
+# ResourceManager: http://localhost:8088
+
+# --- RUN PIPELINE WITH HDFS ---
+# export USE_HDFS=1
+# python scripts/run_pipeline.py --use-hdfs
+
+# --- FORMAT NAMENODE (first-time setup only - DESTRUCTIVE) ---
+# hdfs namenode -format

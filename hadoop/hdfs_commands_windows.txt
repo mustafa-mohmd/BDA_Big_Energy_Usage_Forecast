@@ -1,0 +1,49 @@
+# HDFS Commands - Windows (PowerShell / CMD)
+# =============================================
+# Prerequisites: Hadoop installed and configured on Windows or WSL2
+# Recommended: Use WSL2 + Ubuntu for Hadoop (see README.md)
+
+# --- START HADOOP (WSL2 recommended) ---
+# In WSL Ubuntu terminal:
+#   sudo service ssh start
+#   start-dfs.sh
+#   start-yarn.sh
+
+# --- CREATE HDFS DIRECTORIES ---
+hdfs dfs -mkdir -p /energy_forecasting
+hdfs dfs -mkdir -p /energy_forecasting/raw
+hdfs dfs -mkdir -p /energy_forecasting/processed
+hdfs dfs -mkdir -p /energy_forecasting/features
+hdfs dfs -mkdir -p /energy_forecasting/results
+
+# --- LIST DIRECTORIES ---
+hdfs dfs -ls /energy_forecasting
+hdfs dfs -ls /energy_forecasting/raw
+
+# --- UPLOAD RAW DATASET TO HDFS ---
+# From project root (adjust path for your environment):
+hdfs dfs -put data\raw\household_power_consumption.txt /energy_forecasting/raw/
+
+# --- VERIFY UPLOAD ---
+hdfs dfs -ls /energy_forecasting/raw
+hdfs dfs -du -h /energy_forecasting/raw
+
+# --- READ SAMPLE FROM HDFS ---
+hdfs dfs -cat /energy_forecasting/raw/household_power_consumption.txt | more
+
+# --- LIST PROCESSED DATA (after pipeline run with --use-hdfs) ---
+hdfs dfs -ls /energy_forecasting/processed/hourly
+hdfs dfs -ls /energy_forecasting/features/features
+
+# --- COPY RESULTS FROM HDFS TO LOCAL ---
+hdfs dfs -get /energy_forecasting/results ./results/hdfs_export
+
+# --- REMOVE DATA (cleanup) ---
+# hdfs dfs -rm -r /energy_forecasting/processed
+# hdfs dfs -rm -r /energy_forecasting/features
+
+# --- CHECK HDFS HEALTH ---
+hdfs dfsadmin -report
+
+# --- RUN PIPELINE WITH HDFS ---
+# python scripts/run_pipeline.py --use-hdfs
